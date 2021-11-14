@@ -32,6 +32,7 @@
 .App-body {
   background-color: #282c34;
   padding-top: 20px;
+  min-height: 100vh;
 }
 
 @keyframes App-logo-spin {

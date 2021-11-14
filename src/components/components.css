@@ -1,0 +1,27 @@
+.teamName {
+  color: white;
+}
+
+.teamDetails {
+  color: white;
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+}
+
+.detailsSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px white solid;
+  margin: 0 15rem;
+  align-items: center;
+}
+
+.teamMember {
+  padding: 0.5rem;
+}
+
+button {
+  background-color: #282c34;
+  color: white;
+  border: none;
+}
