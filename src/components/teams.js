@@ -3,12 +3,16 @@ import PropTypes from 'prop-types';
 import TeamDetails from './teamDetails';
 import './components.css';
 
-const Teams = props => {
+const Teams = () => {
 
     const [teams, setTeams] = useState(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [currentTeam, setCurrentTeam] = useState(null)
+
+    // input states
+    const [searchTerm, setSearchTerm] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
 
     useEffect(()=>{
         fetch('https://cgjresszgg.execute-api.eu-west-1.amazonaws.com/teams/')
@@ -27,20 +31,44 @@ const Teams = props => {
           .finally(setLoading(false))
     }, [])
 
+    const handleChange = event => {
+        setSearchTerm(event.target.value);
+    };
+
+    useEffect(() => {
+        if (teams) {
+            const results = teams.filter(team =>
+                team.name.toLowerCase().includes(searchTerm)
+            );
+            setSearchResults(results);
+        }
+    }, [searchTerm]);
+
     if (loading) return "Loading..."
     if (error) return "Error!"
 
-    return (
+    return ( 
         !currentTeam ? 
-        <div>
+        <div className={"mainPage"} data-testid="teams">
+            <input
+                type="text"
+                placeholder="Search"
+                value={searchTerm}
+                onChange={handleChange}
+            />
             <ul>
-            {teams && teams.map(team => 
+            {teams && !searchResults ? teams.map(team => 
                 <li>
-                    <button onClick={setCurrentTeam(team.id)}>{team.name}</button>
-                </li>)}
+                    <button onClick={()=>setCurrentTeam(team.id)}>{team.name}</button>
+                </li>) : 
+                searchResults.map(team => 
+                    <li>
+                        <button onClick={()=>setCurrentTeam(team.id)}>{team.name}</button>
+                    </li>)
+            }
             </ul>
         </div> : <div>
-            <TeamDetails teamId={currentTeam}/>
+            <TeamDetails currentTeam={currentTeam} setCurrentTeam={setCurrentTeam}/>
             </div>
     );
 };

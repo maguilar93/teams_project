@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import './components.css';
+import UserDetails from './userDetails';
 
 const TeamDetails = props => {
 
-    const {teamId} = props;
+    const {currentTeam, setCurrentTeam} = props;
     
     const [teamDetails, setTeamDetails] = useState(null)
     const [users, setUsers] = useState(null)
@@ -16,8 +17,8 @@ const TeamDetails = props => {
     let teamLeadName;
 
     useEffect(()=>{
-        if (teamId) {
-            fetch(`https://cgjresszgg.execute-api.eu-west-1.amazonaws.com/teams/${teamId}`)
+        if (currentTeam) {
+            fetch(`https://cgjresszgg.execute-api.eu-west-1.amazonaws.com/teams/${currentTeam}`)
             .then(response => {
                 if (response) {
                     return response.json()
@@ -32,8 +33,7 @@ const TeamDetails = props => {
             })
             .finally(setLoading(false))
         }
-    }, [teamId])
-
+    }, [currentTeam])
 
     useEffect(()=>{
         fetch(`https://cgjresszgg.execute-api.eu-west-1.amazonaws.com/users`)
@@ -52,8 +52,6 @@ const TeamDetails = props => {
         .finally(setLoading(false))
     }, [])
 
-    console.log('pero', users)
-
     if (loading) return "Loading..."
     if (error) return "Error!"
     if (teamDetails && teamDetails.teamMemberIds && users) {
@@ -67,30 +65,29 @@ const TeamDetails = props => {
         return finalResult;
     }
 
-    console.log(teamMembersDetails)
-    console.log('currentUser', currentUser)
-
     return (
-        teamDetails && teamId && 
-        <div className='teamDetails'>
-            <div className="detailsSection">
-                <div>{`Name`}</div>
-                <div>{teamDetails.name}</div>
+        !currentUser ? 
+        teamDetails && currentTeam && 
+        <div>
+            <div className='teamDetails'>
+                <div className="detailsSection">
+                    <div>{`Name`}</div>
+                    <div>{teamDetails.name}</div>
+                </div>
+                <div className="detailsSection">
+                    <div>{`Team Lead Display Name`}</div>
+                    {teamLeadName && <button onClick={()=>{setCurrentUser(teamLeadName.id)}}>{teamLeadName.displayName}</button>}
+                </div>
+                <div className="detailsSection">
+                    <div>{`Members Display Name`}</div>
+                    <div className={'listOfNames'}>{teamMembersDetails.map(member => 
+                            <button className='teamMember' onClick={()=>{setCurrentUser(member.id)}}>{member.displayName}</button>
+                        )}
+                    </div>
+                </div>
             </div>
-            <div className="detailsSection">
-                <div>{`Team Lead`}</div>
-                {teamLeadName && <button>{titleCase(teamLeadName.displayName)}</button>}
-            </div>
-            <div className="detailsSection">
-                <div>{`Members`}</div>
-                <ul>{teamMembersDetails.map(member => 
-                    <li>
-                        <button className='teamMember' onClick={()=>{setCurrentUser(member.id)}}>{titleCase(member.displayName)}</button>
-                    </li>
-                    )}
-                </ul>
-            </div>
-        </div>
+            <button onClick={()=>{setCurrentTeam(null)}}>Return</button>
+        </div> : <div><UserDetails currentUser={currentUser} setCurrentUser={setCurrentUser}/></div>
     );
 };
 

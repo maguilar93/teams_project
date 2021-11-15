@@ -1,11 +1,17 @@
+.mainPage {
+  padding: 2rem 0 5rem;
+}
+
 .teamName {
   color: white;
 }
 
 .teamDetails {
   color: white;
+}
+
+.listOfNames {
   display: grid;
-  grid-template-rows: 1fr 1fr 1fr;
 }
 
 .detailsSection {
@@ -14,6 +20,7 @@
   border: 1px white solid;
   margin: 0 15rem;
   align-items: center;
+  padding: 2rem 0;
 }
 
 .teamMember {
@@ -24,4 +31,17 @@ button {
   background-color: #282c34;
   color: white;
   border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  color: red;
+}
+
+li {
+  list-style: none;
+}
+
+ul {
+  padding-left: 0;
 }
