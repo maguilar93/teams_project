@@ -25,7 +25,7 @@ const UserDetails = props => {
             setError(error)
         })
         .finally(setLoading(false))
-    }, [])
+    }, [currentUser])
 
     if (loading) return "Loading..."
     if (error) return "Error!"

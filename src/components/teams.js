@@ -42,7 +42,7 @@ const Teams = () => {
             );
             setSearchResults(results);
         }
-    }, [searchTerm]);
+    }, [searchTerm, teams]);
 
     if (loading) return "Loading..."
     if (error) return "Error!"
