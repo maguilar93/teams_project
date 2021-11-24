@@ -3,12 +3,26 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
+import UserDetails from './components/userDetails';
+import TeamDetails from './components/teamDetails';
 
 ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
+  <Router>
+    <Routes>
+        
+      <Route path="/" element={<App />}/>
+
+      <Route path="/team/:team/user/:user" element={<UserDetails />}/>
+
+      <Route path="/team/:team" element={<TeamDetails />}/>
+
+    </Routes>
+  </Router>,
   document.getElementById('root')
 );
 

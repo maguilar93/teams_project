@@ -1,41 +1,25 @@
-import React, {useState, useEffect} from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
+import { useParams } from 'react-router';
+import {NavLink} from "react-router-dom";
+import { useUserDetails } from '../talons/useUserDetails';
 
-const UserDetails = props => {
+const UserDetails = () => {
 
-    const {currentUser, setCurrentUser} = props
+    const params = useParams()
 
-    const [userDetails, setUserDetails] = useState(null)
-    const [users, setUsers] = useState(null)
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
-
-    useEffect(()=>{
-        fetch(`https://cgjresszgg.execute-api.eu-west-1.amazonaws.com/users/${currentUser}`)
-        .then(response => {
-            if (response) {
-                return response.json()
-            }
-        })
-        .then(data => {
-            setUserDetails(data)
-        })
-        .catch(error => {
-            console.error("Error fetching data: ", error)
-            setError(error)
-        })
-        .finally(setLoading(false))
-    }, [currentUser])
+    const talonProps = useUserDetails({user: params.user})
+    const {loading, error, userDetails} = talonProps
+    const image = userDetails && userDetails.avatarUrl
 
     if (loading) return "Loading..."
     if (error) return "Error!"
 
     return (
-        <div data-testid="userDetails">
+        <div data-testid="userDetails" >
             {userDetails && 
-            <div>
+            <div className="App-body">
                 <div>
-                    <img src={userDetails.avatarUrl}/>
+                    <img src={image} alt={'user'}/>
                 </div>
                 <div className='teamDetails'>
                 <div className="detailsSection">
@@ -51,14 +35,10 @@ const UserDetails = props => {
                         <div>{userDetails.location}</div>
                     </div>
                 </div>
-                <button onClick={()=>{setCurrentUser(null)}}>Return</button>
+                <NavLink to={`/team/${params.team}`}>Return</NavLink>
             </div>}
         </div>
     );
-};
-
-UserDetails.propTypes = {
-    
 };
 
 export default UserDetails;

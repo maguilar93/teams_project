@@ -3,7 +3,6 @@ import React from 'react';
 import Teams from './components/teams';
 
 function App() {
-
   return (
     <div className="App">
       <header className="App-header">

@@ -1,80 +1,46 @@
-import React, {useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
-import TeamDetails from './teamDetails';
+import React from 'react';
 import './components.css';
+import {useTeams} from "../talons/useTeams"
+import {NavLink} from "react-router-dom";
 
 const Teams = () => {
 
-    const [teams, setTeams] = useState(null)
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
-    const [currentTeam, setCurrentTeam] = useState(null)
+    const talonProps = useTeams();
 
-    // input states
-    const [searchTerm, setSearchTerm] = useState("");
-    const [searchResults, setSearchResults] = useState([]);
-
-    useEffect(()=>{
-        fetch('https://cgjresszgg.execute-api.eu-west-1.amazonaws.com/teams/')
-        .then(response => {
-            if (response) {
-                return response.json()
-            }
-        })
-        .then(data => {
-            setTeams(data)
-          })
-          .catch(error => {
-              console.error("Error fetching data: ", error)
-              setError(error)
-          })
-          .finally(setLoading(false))
-    }, [])
-
-    const handleChange = event => {
-        setSearchTerm(event.target.value);
-    };
-
-    useEffect(() => {
-        if (teams) {
-            const results = teams.filter(team =>
-                team.name.toLowerCase().includes(searchTerm)
-            );
-            setSearchResults(results);
-        }
-    }, [searchTerm, teams]);
+    const { 
+      searchResults,
+      teams,
+      handleChange,
+      loading,
+      error,
+      searchTerm,
+    } = talonProps;
 
     if (loading) return "Loading..."
-    if (error) return "Error!"
+    if (error) return error
 
     return ( 
-        !currentTeam ? 
+
         <div className={"mainPage"} data-testid="teams">
             <input
                 type="text"
                 placeholder="Search"
-                value={searchTerm}
+                value={searchTerm ? searchTerm : ''}
                 onChange={handleChange}
             />
             <ul>
             {teams && !searchResults ? teams.map(team => 
                 <li>
-                    <button onClick={()=>setCurrentTeam(team.id)}>{team.name}</button>
+                    <NavLink to={`/team/${team.id}`}>{team.name}</NavLink>
                 </li>) : 
                 searchResults.map(team => 
                     <li>
-                        <button onClick={()=>setCurrentTeam(team.id)}>{team.name}</button>
+                        <NavLink to={`/team/${team.id}`}>{team.name}</NavLink>
                     </li>)
             }
             </ul>
-        </div> : <div>
-            <TeamDetails currentTeam={currentTeam} setCurrentTeam={setCurrentTeam}/>
-            </div>
+        </div> 
     );
-};
-
-Teams.propTypes = {
-    
 };
 
 export default Teams;

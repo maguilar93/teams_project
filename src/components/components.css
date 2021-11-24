@@ -27,14 +27,15 @@
   padding: 0.5rem;
 }
 
-button {
+a {
   background-color: #282c34;
   color: white;
   border: none;
   cursor: pointer;
+  text-decoration: none;
 }
 
-button:hover {
+a:hover {
   color: red;
 }
 
