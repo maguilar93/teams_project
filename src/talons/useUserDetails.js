@@ -4,8 +4,6 @@ export const useUserDetails = props => {
 
     const {user} = props;
 
-    console.log(user)
-
     const [userDetails, setUserDetails] = useState(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
