@@ -46,15 +46,12 @@ const DataFetchingTeams = () => {
     useEffect(()=>{
         axios.get('https://cgjresszgg.execute-api.eu-west-1.amazonaws.com/teams/')
         .then(response => {
-            console.log('both', response)
             dispatch({type: 'FETCH_SUCCESS', payload: response.json()})
         })
         .catch(error =>{
             dispatch({type: 'FETCH_ERROR', payload: error})
         })
     }, [])
-
-    console.log('zin', state.teams)
 
     useEffect(() => {
         if (state.teams) {
