@@ -1,4 +1,4 @@
-# TEMPO TECHNICAL TEST
+
 
 Front-end developer exercise
 
